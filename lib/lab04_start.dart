@@ -471,7 +471,7 @@ class PromoStrip extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: Gap.md),
           itemCount: promos.length,
-          separatorBuilder: (_, __) => const SizedBox(width: Gap.md),
+          separatorBuilder: (_, '__') => const SizedBox(width: Gap.md),
           itemBuilder: (context, index) => PromoCard(item: promos[index]),
         ),
       ),
