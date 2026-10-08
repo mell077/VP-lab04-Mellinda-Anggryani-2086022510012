@@ -1,23 +1,14 @@
-Lab 04 
+# Lab 04 – Fix log
 
-Tiap baris berisi: widget yang bermasalah, gejalanya, aturan constraint yang dilanggar, dan cara aku memperbaikinya.
-
-**StoreHeader**: Row meluap ke kanan di layar 320 dp. Penyebabnya Row memberi lebar tanpa batas ke Column dan teks rating. Kuperbaiki dengan membungkus Column pakai Expanded, memberi teks maxLines: 1 dan ellipsis, lalu memindah rating ke bawah jam buka.
-
-**CategoryBar**: deretan chip meluap ke kanan. Row memberi ruang lebih banyak daripada lebar layar yang ada. Kuperbaiki dengan membungkusnya pakai `SingleChildScrollVie horizontal.
-
-**PromoStrip dan PromoCard**: dua kartu lebar 200 meluap di 320 dan 430 dp, dan promosi error kalau promo kurang dari dua. Penyebabnya kartu berlebar tetap di dalam Row tidak peduli lebar parent-nya. Kuganti dengan ListView.separated horizontal, teks diberi maxLines dan ellipsis, dan strip disembunyikan kalau tidak ada promo.
-
-**MenuTile**: Row meluap ke kanan saat nama menu 200 karakter. Row memberi lebar tanpa batas ke Column nama (Spacer tidak membatasi apa-apa). Kuperbaiki dengan Expanded pada Column, maxLines: 2, dan ellipsis.
-
-**MenuScreen (body)**: meluap ke bawah saat landscape dan saat keyboard terbuka. Column memberi tinggi tak terbatas ke anak-anaknya, padahal tinggi layar terbatas. Kuganti dengan satu CustomScrollView berisi sliver supaya seluruh halaman bisa di-scroll.
-
-**MenuScreen (list)**: list panjang dibangun sekaligus, jadi berat kalau datanya ratusan. List yang panjangnya tidak diketahui harus dibangun lazy. Kupakai SliverList.builder.
-
-**MenuScreen (tablet)**: layout dipilih pakai MediaQuery dan sel GridView.count(4) membuat kartu meluap. Layout seharusnya mengikuti lebar yang diberikan parent. Kuganti dengan LayoutBuilder (600 dp ke atas jadi grid), SliverGridDelegateWithMaxCrossAxisExtent, dan SliverGrid.builder.
-
-**MenuCard**: gambar setinggi tetap 110 dp ditambah teks meluap ke bawah di dalam sel grid. Tinggi sel ditentukan parent, jadi isinya tidak boleh memaksa ukuran sendiri. Area gambar kubungkus Expanded dan teks diberi maxLines dan ellipsis.
-
-**MenuScreen (data kosong)**: layar kosong atau error promos[0] saat datanya nol. Kodenya mengira data pasti ada. Kutambahkan widget EmptyState (key empty-state) berisi ikon, pesan, dan tombol reset filter.
-
-**CartBar**: Row meluap di 320 dp, tingginya dipatok 72, dan tombolnya tertutup gesture bar. Penyebabnya tombol berlebar tetap 160 dan teks panjang berada dalam satu Row, serta tidak memperhitungkan safe area. Teks kupindah ke Column dalam Expanded dengan ellipsis, tombol dibiarkan selebar isinya, dan isi bar dibungkus SafeArea.
+| Widget | Error / gejala | Aturan yang dilanggar | Perbaikan |
+|---|---|---|---|
+| StoreHeader | Row overflow ke kanan di 320 dp | Row memberi Column dan teks rating lebar tanpa batas | Column dibungkus `Expanded`, teks `maxLines: 1` + ellipsis, rating dipindah ke bawah jam buka |
+| CategoryBar | Row chip overflow ke kanan | Row memberi chip lebih banyak dari lebar layar | Dibungkus `SingleChildScrollView` horizontal |
+| PromoStrip / PromoCard | Dua kartu lebar 200 overflow di 320 dan 430 dp, dan `promos[1]` crash kalau promo kurang dari 2 | Anak berlebar tetap dalam Row tidak peduli lebar parent | `ListView.separated` horizontal, teks `maxLines` + ellipsis, strip disembunyikan kalau tidak ada promo |
+| MenuTile | Row overflow ke kanan saat nama 200 karakter | Row memberi Column nama lebar tanpa batas (`Spacer` tidak membatasi) | `Expanded` pada Column, `maxLines: 2` + ellipsis |
+| MenuScreen (body) | Overflow di bawah saat landscape dan keyboard terbuka | Column memberi anaknya tinggi tak terbatas, padahal layar terbatas | Satu `CustomScrollView` dengan sliver |
+| MenuScreen (list) | List panjang dibangun sekaligus akan lambat | List dengan panjang tak diketahui harus lazy | `SliverList.builder` |
+| MenuScreen (tablet) | Layout dipilih dengan `MediaQuery`, sel `GridView.count(4)` membuat kartu overflow | Layout harus mengikuti lebar yang diberikan parent | `LayoutBuilder` (>= 600 dp = grid), `SliverGridDelegateWithMaxCrossAxisExtent` + `SliverGrid.builder` |
+| MenuCard | Gambar tinggi tetap 110 dp + teks overflow di bawah sel grid | Anak berukuran tetap di sel yang tingginya ditentukan parent | Area gambar dibungkus `Expanded`, teks `maxLines` + ellipsis |
+| MenuScreen (kosong) | Data nol: layar kosong atau RangeError `promos[0]` | Kode mengira data selalu ada | `EmptyState` (key `empty-state`) berisi ikon, pesan, dan tombol reset |
+| CartBar | Row overflow di 320 dp, tinggi tetap 72, tertutup gesture bar | Tombol lebar tetap 160 + teks panjang dalam Row, dan mengabaikan safe area | Teks dalam `Expanded` Column dengan ellipsis, tombol selebar isinya, `SafeArea` di dalam bar |
